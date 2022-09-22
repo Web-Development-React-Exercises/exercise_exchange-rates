@@ -9,38 +9,40 @@ function App() {
   const [gbp, setGbp] = useState(0);
   const [rate, setRate] = useState('Rate is loading, please wait');
 
-  useEffect(() => {
-    async function getRate() {
-      try {
-        var myHeaders = new Headers();
-        myHeaders.append("apikey", API_KEY);
+  async function getRate() {
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append("apikey", API_KEY);
 
-        var requestOptions = {
-          method: 'GET',
-          redirect: 'follow',
-          headers: myHeaders
-        };
-        const response = await fetch(URL, requestOptions);
-        
-        if (response.ok) {
-          const json = await response.json();
-          console.log(json);
-  
-          setRate(json.rates.GBP);
-  
-        } else {
-          alert('Error');
-          console.log(response);
-        }
-      } catch (err) {
-        console.error(err);
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: myHeaders
+      };
+      const response = await fetch(URL, requestOptions);
+
+      if (response.ok) {
+        const json = await response.json();
+        console.log(json);
+
+        setRate(json.rates.GBP);
+
+      } else {
+        alert('Error');
+        console.log(response);
       }
+    } catch (err) {
+      console.error(err);
     }
+  }
+
+  useEffect(() => {
     getRate();
   }, []);
 
   function convert(e) {
     e.preventDefault();
+    getRate();
     setGbp(eur * rate);
   }
 
