@@ -48,12 +48,13 @@ function App() {
 
 
   return (
-    <div id='container'>
+    <>
       <form onSubmit={convert}>
         <div>
           <label htmlFor="">Euros</label>
           <input type="number" value={eur} onChange={e => setEur(e.target.value)} />
           <output>{rate}</output>
+          <button onClick={getRate()}>Update Rate</button>
         </div>
         <div>
           <label htmlFor="">Pounds</label>
@@ -62,10 +63,7 @@ function App() {
 
         </div>
       </form>
-      <p>{eur}</p>
-      <p>{rate}</p>
-      <p>{gbp}</p>
-    </div>
+    </>
   );
 }
 
