@@ -1,44 +1,53 @@
 import './App.css';
 import { useState, useEffect } from "react";
 
-const URL = '911b3806a1cbe40dacf96b52c007b3f3';
-const API_KEY = '911b3806a1cbe40dacf96b52c007b3f3';
-
-
+const URL = 'https://api.apilayer.com/exchangerates_data/latest';
+const API_KEY = 'rGEXR2U27MlbtSNXC3NOHJcdXfdcsjqM';
 
 function App() {
   const [eur, setEur] = useState(0);
   const [gbp, setGbp] = useState(0);
-  const [rate, setRate] = useState(0);
+  const [rate, setRate] = useState('Rate is loading, please wait');
 
-  useEffect(()=> {
-    setRate(23)
-  }
-  ,[]);
+  useEffect(() => {
+    async function getRate() {
+      try {
+        var myHeaders = new Headers();
+        myHeaders.append("apikey", API_KEY);
 
-  async function convert(e) {
-    e.preventDefault();
-    try {
-      const response = await fetch(URL + API_KEY)
-      if (response.ok) {
-        const json = await response.json();
-        console.log(response)
-        //setRate(json.rates.GBP);
-
-        setGbp(eur * rate);
-      } else {
-        alert('Error');
-        console.log(response);
+        var requestOptions = {
+          method: 'GET',
+          redirect: 'follow',
+          headers: myHeaders
+        };
+        const response = await fetch(URL, requestOptions);
+        
+        if (response.ok) {
+          const json = await response.json();
+          console.log(json);
+  
+          setRate(json.rates.GBP);
+  
+        } else {
+          alert('Error');
+          console.log(response);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (e) {
-      alert(e);
     }
+    getRate();
+  }, []);
+
+  function convert(e) {
+    e.preventDefault();
+    setGbp(eur * rate);
   }
 
 
   return (
     <div id='container'>
-      <form onSubmit={convert()}>
+      <form onSubmit={convert}>
         <div>
           <label htmlFor="">Euros</label>
           <input type="number" value={eur} onChange={e => setEur(e.target.value)} />
@@ -47,10 +56,13 @@ function App() {
         <div>
           <label htmlFor="">Pounds</label>
           <output>{gbp}</output>
-          <button onClick={convert()}>Convert</button>
+          <button onClick={convert}>Convert</button>
 
         </div>
       </form>
+      <p>{eur}</p>
+      <p>{rate}</p>
+      <p>{gbp}</p>
     </div>
   );
 }
