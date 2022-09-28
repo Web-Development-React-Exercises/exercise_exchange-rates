@@ -1,7 +1,7 @@
 import './App.css';
 import { useState, useEffect } from "react";
 
-const URL = 'https://api.apilayer.com/exchangerates_data/latest';
+const URL = 'https://api.exchangerate.host/latest';
 const API_KEY = 'rGEXR2U27MlbtSNXC3NOHJcdXfdcsjqM';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
       var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: myHeaders
+        //headers: myHeaders
       };
       const response = await fetch(URL, requestOptions);
 
